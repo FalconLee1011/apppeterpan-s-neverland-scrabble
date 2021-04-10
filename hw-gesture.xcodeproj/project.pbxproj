@@ -11,6 +11,8 @@
 		D29751C32621883400B8705E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751C22621883400B8705E /* ContentView.swift */; };
 		D29751C52621883600B8705E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D29751C42621883600B8705E /* Assets.xcassets */; };
 		D29751C82621883600B8705E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D29751C72621883600B8705E /* Preview Assets.xcassets */; };
+		D29751D1262194DF00B8705E /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751D0262194DF00B8705E /* TimerView.swift */; };
+		D29751D426219D1000B8705E /* xTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751D326219D1000B8705E /* xTimer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		D29751C42621883600B8705E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D29751C72621883600B8705E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D29751C92621883600B8705E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D29751D0262194DF00B8705E /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		D29751D326219D1000B8705E /* xTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xTimer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +58,8 @@
 			children = (
 				D29751C02621883400B8705E /* hw_gestureApp.swift */,
 				D29751C22621883400B8705E /* ContentView.swift */,
+				D29751D326219D1000B8705E /* xTimer.swift */,
+				D29751D0262194DF00B8705E /* TimerView.swift */,
 				D29751C42621883600B8705E /* Assets.xcassets */,
 				D29751C92621883600B8705E /* Info.plist */,
 				D29751C62621883600B8705E /* Preview Content */,
@@ -138,8 +144,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D29751D1262194DF00B8705E /* TimerView.swift in Sources */,
 				D29751C32621883400B8705E /* ContentView.swift in Sources */,
 				D29751C12621883400B8705E /* hw_gestureApp.swift in Sources */,
+				D29751D426219D1000B8705E /* xTimer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,7 +205,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -252,7 +260,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -272,7 +280,7 @@
 				DEVELOPMENT_TEAM = ZP5A8E7DWH;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "hw-gesture/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -294,7 +302,7 @@
 				DEVELOPMENT_TEAM = ZP5A8E7DWH;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "hw-gesture/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

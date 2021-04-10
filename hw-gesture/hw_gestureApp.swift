@@ -11,7 +11,9 @@ import SwiftUI
 struct hw_gestureApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+          ContentView(t: xTimer(time: 10, interval: 1, callback: {
+            print("")
+          }))
         }
     }
 }
