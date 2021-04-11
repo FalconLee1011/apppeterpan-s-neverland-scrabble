@@ -1,0 +1,27 @@
+[
+  {
+    "word": "ABCD",
+    "holes": [2, 3],
+    "image": ""
+  },
+  {
+    "word": "EFGH",
+    "holes": [0, 2],
+    "image": ""
+  },
+  {
+    "word": "IJKLMNOP",
+    "holes": [1, 3, 6],
+    "image": ""
+  },
+  {
+    "word": "QRST",
+    "holes": [2, 3],
+    "image": ""
+  },
+  {
+    "word": "UVWX",
+    "holes": [0, 1],
+    "image": ""
+  }
+]

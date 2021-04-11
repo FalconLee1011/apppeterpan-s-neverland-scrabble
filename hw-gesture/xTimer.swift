@@ -13,14 +13,16 @@ class xTimer{
   var isCountion: Bool = false
   var timer: Timer = Timer()
   var callback: () -> Any
+  var callbackOnTimerDone: (() -> Any)?
   
   var _intervalHasBeen: Double
 
-  init(time: Double, interval: Double, callback: @escaping () -> Any){
+  init(time: Double, interval: Double, callback: @escaping () -> Any, callbackOnTimerDone: (() -> Any)? = nil){
     self.time = time
     self.interval = interval
     self.callback = callback
     self._intervalHasBeen = 0
+    self.callbackOnTimerDone = callbackOnTimerDone ?? nil
   }
 
   func start(){
@@ -32,11 +34,19 @@ class xTimer{
     self._intervalHasBeen = 0
   }
   
+  func stop() {
+    self.timer.invalidate()
+    self.timer = Timer()
+  }
+  
   @objc func _callback() -> Any{
     self._intervalHasBeen += self.interval
     if(self._intervalHasBeen >= self.time){
       self.reset()
       print("TIMER STOP")
+      if(self.callbackOnTimerDone != nil){
+        return self.callbackOnTimerDone!()
+      }
     }
     return self.callback()
   }

@@ -9,9 +9,17 @@ import SwiftUI
 
 struct TimerView: View {
   @Binding var progress: Double
+  
   var body: some View {
     ZStack {
-      ProgressView(value: self._checkProgress(progress: progress)).scaleEffect(x: 1, y: 5, anchor: .center).accentColor(.green)
+      ProgressView(value: self._checkProgress(progress: progress))
+        .scaleEffect(x: 1, y: 5, anchor: .center)
+        .accentColor((progress > 0.5) ? .green : (progress > 0.25) ? .yellow : .red )
+      
+      ProgressView(value: self._checkProgress(progress: progress))
+        .scaleEffect(x: 1, y: 2, anchor: .center)
+        .accentColor(.white)
+
       Text("\(self._checkProgress(progress: progress))")
     }
   }

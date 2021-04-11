@@ -7,15 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D27902592622482000326BAC /* Galactic-Basic-Standard.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27902582622482000326BAC /* Galactic-Basic-Standard.ttf */; };
+		D279025C2622BD0E00326BAC /* questions.json in Resources */ = {isa = PBXBuildFile; fileRef = D279025B2622BD0E00326BAC /* questions.json */; };
 		D29751C12621883400B8705E /* hw_gestureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751C02621883400B8705E /* hw_gestureApp.swift */; };
 		D29751C32621883400B8705E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751C22621883400B8705E /* ContentView.swift */; };
 		D29751C52621883600B8705E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D29751C42621883600B8705E /* Assets.xcassets */; };
 		D29751C82621883600B8705E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D29751C72621883600B8705E /* Preview Assets.xcassets */; };
 		D29751D1262194DF00B8705E /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751D0262194DF00B8705E /* TimerView.swift */; };
 		D29751D426219D1000B8705E /* xTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751D326219D1000B8705E /* xTimer.swift */; };
+		D29751DF26221DDE00B8705E /* Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751DE26221DDE00B8705E /* Word.swift */; };
+		D29751E2262229D600B8705E /* JSONLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751E1262229D600B8705E /* JSONLoader.swift */; };
+		D29751E52622413600B8705E /* PassSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751E42622413600B8705E /* PassSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D27902582622482000326BAC /* Galactic-Basic-Standard.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Galactic-Basic-Standard.ttf"; sourceTree = "<group>"; };
+		D279025B2622BD0E00326BAC /* questions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = questions.json; sourceTree = "<group>"; };
 		D29751BD2621883400B8705E /* hw-gesture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hw-gesture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D29751C02621883400B8705E /* hw_gestureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hw_gestureApp.swift; sourceTree = "<group>"; };
 		D29751C22621883400B8705E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -24,6 +31,9 @@
 		D29751C92621883600B8705E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D29751D0262194DF00B8705E /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		D29751D326219D1000B8705E /* xTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xTimer.swift; sourceTree = "<group>"; };
+		D29751DE26221DDE00B8705E /* Word.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Word.swift; sourceTree = "<group>"; };
+		D29751E1262229D600B8705E /* JSONLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONLoader.swift; sourceTree = "<group>"; };
+		D29751E42622413600B8705E /* PassSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,10 +68,15 @@
 			children = (
 				D29751C02621883400B8705E /* hw_gestureApp.swift */,
 				D29751C22621883400B8705E /* ContentView.swift */,
+				D29751DE26221DDE00B8705E /* Word.swift */,
+				D29751E42622413600B8705E /* PassSheet.swift */,
 				D29751D326219D1000B8705E /* xTimer.swift */,
+				D29751E1262229D600B8705E /* JSONLoader.swift */,
 				D29751D0262194DF00B8705E /* TimerView.swift */,
+				D27902582622482000326BAC /* Galactic-Basic-Standard.ttf */,
 				D29751C42621883600B8705E /* Assets.xcassets */,
 				D29751C92621883600B8705E /* Info.plist */,
+				D279025B2622BD0E00326BAC /* questions.json */,
 				D29751C62621883600B8705E /* Preview Content */,
 			);
 			path = "hw-gesture";
@@ -133,6 +148,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D29751C82621883600B8705E /* Preview Assets.xcassets in Resources */,
+				D279025C2622BD0E00326BAC /* questions.json in Resources */,
+				D27902592622482000326BAC /* Galactic-Basic-Standard.ttf in Resources */,
 				D29751C52621883600B8705E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -145,8 +162,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D29751D1262194DF00B8705E /* TimerView.swift in Sources */,
+				D29751E2262229D600B8705E /* JSONLoader.swift in Sources */,
 				D29751C32621883400B8705E /* ContentView.swift in Sources */,
+				D29751DF26221DDE00B8705E /* Word.swift in Sources */,
 				D29751C12621883400B8705E /* hw_gestureApp.swift in Sources */,
+				D29751E52622413600B8705E /* PassSheet.swift in Sources */,
 				D29751D426219D1000B8705E /* xTimer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

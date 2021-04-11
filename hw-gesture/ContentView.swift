@@ -11,82 +11,222 @@ struct ContentView: View {
   
   @State var progress = 1.0;
   @State var t: xTimer
+
+  @State var questions: Array<Word> = []
   
-  @State var data = ["A", "B", "C"]
-  @State var offsets: Array<CGSize> = [CGSize.zero, CGSize.zero, CGSize.zero]
-  @State var lastOffsets: Array<CGSize> = [CGSize.zero, CGSize.zero, CGSize.zero]
-  
+  @State var offsets: Array<CGSize> = []
+  @State var lastOffsets: Array<CGSize> = []
   @State var dropZones: Array<CGRect> = []
+  @State var pipGeometries: Array<CGRect> =  []
+
+  @State var placedWords: Array<String> = []
   
-  @State var pipGeometries: [CGRect] =  []
+  @State var currentQuestionIndex: Int = 0
+  @State var currentQuestion: Word!
   
-  @State var currentIndex: Int = 0
+  
+  @State var viewIsReady: Bool = false
+  @State var isComplete: Bool = false
+  @State var isGameFinish: Bool = false
+  @State var showSheet: Bool = true
+  @State var isFirstTimeSee: Bool = true
+  
+//  let customFont: Font = .system(size: 30, design: .monospaced)
+  let customFont: Font = .custom("Galactic-Basic-Standard", size: 30)
   
   
-  func dropHandler(_ pipGeometry: CGRect){
+  func dropHandler(_ index: Int){
+    let pipObjectOffset = offsets[index]
+    
+    let geometry = pipGeometries[index]
+    
+    let pipGeometry = CGRect(
+      x: geometry.minX + pipObjectOffset.width - geometry.width,
+      y:  geometry.minY + pipObjectOffset.height - geometry.height,
+      width: geometry.width,
+      height: geometry.height
+    )
     for dropZone in dropZones {
-      if dropZone.intersects(pipGeometry) {
+      if pipGeometry.intersects(dropZone) {
         print("INTERSECTS")
+        offsets[index] = CGSize(
+          width: dropZone.midX - geometry.midX,
+          height: dropZone.midY - geometry.midY
+        )
+        
+        let zoneIndex = Int(dropZones.firstIndex(of: dropZone)!)
+        
+        print("Dropped at zone \(zoneIndex) ( \(dropZone) in \(dropZones) )")
+        
+        placedWords[zoneIndex] = currentQuestion.answerPool[index]
+        lastOffsets[index] = offsets[index]
+        print(placedWords)
+        isComplete = currentQuestion.concat(answer: placedWords)
+        if(isComplete){
+          showSheet = true
+          viewIsReady = false
+          if(currentQuestionIndex == questions.count - 1){
+            isGameFinish = true
+          }
+        }
       }
     }
     print("-----------")
   }
   
   var body: some View {
-    //    VStack{
-    //      TimerView(progress: $progress)
-    //      Spacer()
-    //      Button("BTN") {
-    //        self.t.start()
-    //      }
-    //    }.onAppear(perform: timerInit)
     VStack{
-      Color
-        .orange
-        .frame(width: 50, height: 50, alignment: .center)
-        .overlay(
-          GeometryReader(content: { geometry in
-//            let _ = updateHandler(geomerty: geometry)
-            Color.clear.onAppear {
-              dropZones.append(geometry.frame(in: .global))
-            }
-          })
-        )
-        
-      ForEach(data, id: \.self){ d in
-        Text("\(d)")
-          .offset(offsets[data.firstIndex(of: d)!])
-          .overlay(
-            GeometryReader(content: { geometry in
-              Color.red
-                .opacity(0.2)
-                .onAppear {
-                  pipGeometries.append(geometry.frame(in: .global))
+      ZStack{
+        TimerView(progress: $progress)
+//        Button("BTN") {
+//          self.t.start()
+//        }.padding(.leading, 500)
+      }
+      .onAppear(perform: initView)
+      
+      Spacer()
+      if(viewIsReady){
+        VStack{
+          Spacer()
+          
+          HStack{
+            ForEach(currentQuestion.wordArray.indices, id: \.self){ index in
+              if(currentQuestion.indexIsRedacted(index)){
+                Color
+                  .orange
+                  .frame(width: 50, height: 50, alignment: .center)
+                  .overlay(
+                    GeometryReader(content: { geometry in
+                      Color.clear
+                        .onAppear {
+                          dropZones[currentQuestion.getRedactIndex(index)] = geometry.frame(in: .global)
+                        }
+                    })
+                  )
+              }
+              else{
+                ZStack{
+                  Color
+                    .green
+                    .frame(width: 50, height: 50, alignment: .center)
+                  Text("\(currentQuestion.wordArray[index])")
+                    .font(customFont)
                 }
-            })
-          )
-          .gesture(
-            DragGesture()
-              .onChanged({ dragValue in
-                let currentIndex = data.firstIndex(of: d)!
-                offsets[currentIndex].width = lastOffsets[currentIndex].width + dragValue.translation.width
-                offsets[currentIndex].height = lastOffsets[currentIndex].height + dragValue.translation.height
-              })
-              .onEnded({ _ in
-                let currentIndex = data.firstIndex(of: d)!
-                lastOffsets[currentIndex] = offsets[currentIndex]
-                dropHandler(pipGeometries[currentIndex])
-                print(pipGeometries)
-              })
-          )
+              }
+            }
+          }
+          
+          Spacer()
+          
+          HStack{
+            ForEach(currentQuestion.answerPool.indices, id: \.self){ index in
+              Text("\(currentQuestion.answerPool[index])")
+                .font(customFont)
+                .background(Color.red)
+                .offset(offsets[index])
+                .overlay(
+                  GeometryReader(content: { geometry in
+                    Color.red
+                      .opacity(0.2)
+                      .onAppear {
+                        pipGeometries[index] = geometry.frame(in: .global)
+                      }
+                  })
+                )
+                .gesture(
+                  DragGesture()
+                    .onChanged({ dragValue in
+                      offsets[index].width = lastOffsets[index].width + dragValue.translation.width
+                      offsets[index].height = lastOffsets[index].height + dragValue.translation.height
+                    })
+                    .onEnded({ _ in
+                      lastOffsets[index] = offsets[index]
+                      dropHandler(index)
+                    })
+                )
+            }
+          }
+          Spacer()
+        }
       }
     }
+    .sheet(isPresented: $showSheet){
+      PassSheet(
+        showSheet: $showSheet,
+        isComplete: $isComplete,
+        isGameFinish: $isGameFinish,
+        isFirstTimeSee: $isFirstTimeSee,
+        resetGame: self.resetGame,
+        initGame: self.initView
+      )
+        .onAppear {
+          t.stop()
+        }
+    }
+  }
+
+  
+  func initView() {
+    self.timerInit()
+    self.questionInit()
   }
   
   func timerInit(){
-    self.t = xTimer(time: 10, interval: 0.01, callback: {
-      self.progress -= 0.001
-    })
+    let time = 30.0
+    let interval = 0.005
+    self.progress = 1.0
+    self.t = xTimer(
+      time: time,
+      interval: interval,
+      callback: {
+        self.progress -= interval / time
+      },
+      callbackOnTimerDone: {
+        self.progress = 0.0
+        self.showSheet = true
+        self.viewIsReady = false
+        return 0
+      }
+    )
+  }
+  
+  func questionInit(){
+    let qs = JSONLoader.readLocalJson(fileName: "questions")
+    
+    for q in qs{
+      questions.append(Word(wordRaw: q.word, imagePath: q.image, redactedIndices: q.holes))
+    }
+    print(qs)
+    self.getQuestion()
+  }
+  
+  func getQuestion(){
+    
+    let w = questions[currentQuestionIndex]
+    let holes = w.makeQuestion(holes: w.redactedIndices)
+    let qary = w.getQuestionArray()
+    
+    print(qary)
+    print(holes.count)
+    print(w.wordArray.count)
+    
+    let holeCounts = holes.count
+    let answerCounts = w.answerPool.count
+    
+    self.currentQuestion = questions[self.currentQuestionIndex]
+    self.offsets = [CGSize].init(repeating: .zero, count: answerCounts)
+    self.lastOffsets = [CGSize].init(repeating: .zero, count: answerCounts)
+    self.pipGeometries = [CGRect].init(repeating: .zero, count: answerCounts)
+    self.dropZones = [CGRect].init(repeating: .zero, count: holeCounts)
+    self.placedWords = [String].init(repeating: "_", count: holeCounts)
+  }
+  
+  func resetGame(progress: Bool = true){
+    self.timerInit()
+    if(progress){ self.currentQuestionIndex += 1 }
+    self.getQuestion()
+    t.start()
+    self.viewIsReady = true
   }
 }
 
