@@ -16,6 +16,9 @@ struct PassSheet: View {
   var resetGame: (Bool) -> Void
   var initGame: () -> Void
   
+  @Binding var totalPlayed: Int
+  @Binding var completePlayed: Int
+  
   var body: some View {
     if(isFirstTimeSee){
       Text("Press start to start.")
@@ -26,12 +29,27 @@ struct PassSheet: View {
       }
     }
     else if(isGameFinish){
-      Text("Congratulations! Game Finished!")
-      Button("Start Over"){
-        showSheet = false
-        isFirstTimeSee = false
-        self.initGame()
-        self.resetGame(true)
+      if(completePlayed >= 10){
+        Text("Your score \(completePlayed)/\(totalPlayed)")
+        Text("Congratulations! Game Finished!")
+        Image("whyleave")
+        Button("Stay, and play again"){
+          showSheet = false
+          isGameFinish = false
+          self.initGame()
+          self.resetGame(true)
+        }
+      }
+      else{
+        Text("Your score \(completePlayed)/\(totalPlayed)")
+        Image("yoda-blame")
+        Text("Failed, you have, harder next time you will try.") // I know the sentence looks damn weird, but that's how Yoda talks.
+        Button("Start Over"){
+          showSheet = false
+          isGameFinish = false
+          self.initGame()
+          self.resetGame(true)
+        }
       }
     }
     else{

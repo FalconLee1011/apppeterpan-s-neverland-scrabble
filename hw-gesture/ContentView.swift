@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct ContentView: View {
   
@@ -31,7 +32,12 @@ struct ContentView: View {
   @State var showSheet: Bool = true
   @State var isFirstTimeSee: Bool = true
   
-//  let customFont: Font = .system(size: 30, design: .monospaced)
+  @State var totalPlayed: Int = 0
+  @State var completePlayed: Int = 0
+  
+  @State var cheat: Bool = false
+  
+  let systemFont: Font = .system(size: 30, design: .monospaced)
   let customFont: Font = .custom("Galactic-Basic-Standard", size: 30)
   
   
@@ -65,103 +71,117 @@ struct ContentView: View {
         if(isComplete){
           showSheet = true
           viewIsReady = false
-          if(currentQuestionIndex == questions.count - 1){
-            isGameFinish = true
-          }
+          self.completePlayed += 1
         }
+      }
+      if(currentQuestionIndex == questions.count - 1){
+        isGameFinish = true
       }
     }
     print("-----------")
   }
   
   var body: some View {
-    VStack{
-      ZStack{
+    ZStack{
+      Image("stars")
+        .resizable()
+        .scaledToFill()
+        .edgesIgnoringSafeArea(.all)
+      VStack{
         TimerView(progress: $progress)
-//        Button("BTN") {
-//          self.t.start()
-//        }.padding(.leading, 500)
-      }
-      .onAppear(perform: initView)
-      
-      Spacer()
-      if(viewIsReady){
-        VStack{
+          .onAppear {
+            self.playBGM()
+            self.initView()
+          }
+          .padding(.top, 40)
+        HStack{
           Spacer()
-          
-          HStack{
-            ForEach(currentQuestion.wordArray.indices, id: \.self){ index in
-              if(currentQuestion.indexIsRedacted(index)){
-                Color
-                  .orange
-                  .frame(width: 50, height: 50, alignment: .center)
-                  .overlay(
-                    GeometryReader(content: { geometry in
-                      Color.clear
-                        .onAppear {
-                          dropZones[currentQuestion.getRedactIndex(index)] = geometry.frame(in: .global)
-                        }
-                    })
-                  )
-              }
-              else{
-                ZStack{
+          Text("CHEAT")
+          Toggle(isOn: $cheat){
+            
+          }
+        }
+        Spacer()
+        if(viewIsReady){
+          VStack{
+            Spacer()
+            
+            HStack{
+              ForEach(currentQuestion.wordArray.indices, id: \.self){ index in
+                if(currentQuestion.indexIsRedacted(index)){
                   Color
-                    .green
+                    .orange
                     .frame(width: 50, height: 50, alignment: .center)
-                  Text("\(currentQuestion.wordArray[index])")
-                    .font(customFont)
+                    .overlay(
+                      GeometryReader(content: { geometry in
+                        Color.clear
+                          .onAppear {
+                            dropZones[currentQuestion.getRedactIndex(index)] = geometry.frame(in: .global)
+                          }
+                      })
+                    )
+                }
+                else{
+                  ZStack{
+                    Color
+                      .green
+                      .frame(width: 50, height: 50, alignment: .center)
+                    Text("\(currentQuestion.wordArray[index])")
+                      .font((cheat) ? systemFont : customFont )
+                  }
                 }
               }
             }
-          }
-          
-          Spacer()
-          
-          HStack{
-            ForEach(currentQuestion.answerPool.indices, id: \.self){ index in
-              Text("\(currentQuestion.answerPool[index])")
-                .font(customFont)
-                .background(Color.red)
-                .offset(offsets[index])
-                .overlay(
-                  GeometryReader(content: { geometry in
-                    Color.red
-                      .opacity(0.2)
-                      .onAppear {
-                        pipGeometries[index] = geometry.frame(in: .global)
-                      }
-                  })
-                )
-                .gesture(
-                  DragGesture()
-                    .onChanged({ dragValue in
-                      offsets[index].width = lastOffsets[index].width + dragValue.translation.width
-                      offsets[index].height = lastOffsets[index].height + dragValue.translation.height
+            
+            Spacer()
+            
+            HStack{
+              ForEach(currentQuestion.answerPool.indices, id: \.self){ index in
+                Text("\(currentQuestion.answerPool[index])")
+                  .font((cheat) ? systemFont : customFont )
+                  .background(Color.red)
+                  .offset(offsets[index])
+                  .overlay(
+                    GeometryReader(content: { geometry in
+                      Color.red
+                        .opacity(0.2)
+                        .onAppear {
+                          pipGeometries[index] = geometry.frame(in: .global)
+                        }
                     })
-                    .onEnded({ _ in
-                      lastOffsets[index] = offsets[index]
-                      dropHandler(index)
-                    })
-                )
+                  )
+                  .gesture(
+                    DragGesture()
+                      .onChanged({ dragValue in
+                        offsets[index].width = lastOffsets[index].width + dragValue.translation.width
+                        offsets[index].height = lastOffsets[index].height + dragValue.translation.height
+                      })
+                      .onEnded({ _ in
+                        lastOffsets[index] = offsets[index]
+                        dropHandler(index)
+                      })
+                  )
+              }
             }
+            Spacer()
           }
-          Spacer()
         }
       }
-    }
-    .sheet(isPresented: $showSheet){
+    }.sheet(isPresented: $showSheet){
       PassSheet(
         showSheet: $showSheet,
         isComplete: $isComplete,
         isGameFinish: $isGameFinish,
         isFirstTimeSee: $isFirstTimeSee,
         resetGame: self.resetGame,
-        initGame: self.initView
+        initGame: self.initView,
+        totalPlayed: $totalPlayed,
+        completePlayed: $completePlayed
       )
-        .onAppear {
-          t.stop()
-        }
+      .onAppear {
+        self.isGameFinish = (self.currentQuestionIndex == self.questions.count - 1)
+        t.stop()
+      }
     }
   }
 
@@ -190,6 +210,20 @@ struct ContentView: View {
     )
   }
   
+  func playBGM(){
+    let soundResource = Bundle.main.url(forResource: "bgm", withExtension: "m4a")
+    do{
+      try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+      try AVAudioSession.sharedInstance().setActive(true)
+      let player: AVAudioPlayer? = try AVAudioPlayer(contentsOf: soundResource!, fileTypeHint: AVFileType.m4a.rawValue)
+      player?.numberOfLoops = -1
+      player?.play()
+    }
+    catch{
+      print(error)
+    }
+  }
+  
   func questionInit(){
     let qs = JSONLoader.readLocalJson(fileName: "questions")
     
@@ -198,6 +232,8 @@ struct ContentView: View {
     }
     print(qs)
     self.getQuestion()
+    self.totalPlayed = 0
+    self.completePlayed = 0
   }
   
   func getQuestion(){
@@ -219,6 +255,7 @@ struct ContentView: View {
     self.pipGeometries = [CGRect].init(repeating: .zero, count: answerCounts)
     self.dropZones = [CGRect].init(repeating: .zero, count: holeCounts)
     self.placedWords = [String].init(repeating: "_", count: holeCounts)
+    self.totalPlayed += 1
   }
   
   func resetGame(progress: Bool = true){

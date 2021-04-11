@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D27902592622482000326BAC /* Galactic-Basic-Standard.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D27902582622482000326BAC /* Galactic-Basic-Standard.ttf */; };
 		D279025C2622BD0E00326BAC /* questions.json in Resources */ = {isa = PBXBuildFile; fileRef = D279025B2622BD0E00326BAC /* questions.json */; };
+		D27902612622E30F00326BAC /* bgm.m4a in Resources */ = {isa = PBXBuildFile; fileRef = D27902602622E30F00326BAC /* bgm.m4a */; };
 		D29751C12621883400B8705E /* hw_gestureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751C02621883400B8705E /* hw_gestureApp.swift */; };
 		D29751C32621883400B8705E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29751C22621883400B8705E /* ContentView.swift */; };
 		D29751C52621883600B8705E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D29751C42621883600B8705E /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		D27902582622482000326BAC /* Galactic-Basic-Standard.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Galactic-Basic-Standard.ttf"; sourceTree = "<group>"; };
 		D279025B2622BD0E00326BAC /* questions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = questions.json; sourceTree = "<group>"; };
+		D27902602622E30F00326BAC /* bgm.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bgm.m4a; sourceTree = "<group>"; };
 		D29751BD2621883400B8705E /* hw-gesture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hw-gesture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D29751C02621883400B8705E /* hw_gestureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hw_gestureApp.swift; sourceTree = "<group>"; };
 		D29751C22621883400B8705E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				D29751C42621883600B8705E /* Assets.xcassets */,
 				D29751C92621883600B8705E /* Info.plist */,
 				D279025B2622BD0E00326BAC /* questions.json */,
+				D27902602622E30F00326BAC /* bgm.m4a */,
 				D29751C62621883600B8705E /* Preview Content */,
 			);
 			path = "hw-gesture";
@@ -150,6 +153,7 @@
 				D29751C82621883600B8705E /* Preview Assets.xcassets in Resources */,
 				D279025C2622BD0E00326BAC /* questions.json in Resources */,
 				D27902592622482000326BAC /* Galactic-Basic-Standard.ttf in Resources */,
+				D27902612622E30F00326BAC /* bgm.m4a in Resources */,
 				D29751C52621883600B8705E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
