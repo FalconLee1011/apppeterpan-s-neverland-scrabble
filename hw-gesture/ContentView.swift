@@ -8,18 +8,26 @@
 import SwiftUI
 import AVFoundation
 
+enum sheets: Identifiable{
+  case hint, result
+  
+  var id: Int{
+    hashValue
+  }
+}
+
 struct ContentView: View {
   
   @State var progress = 1.0;
   @State var t: xTimer
-
+  
   @State var questions: Array<Word> = []
   
   @State var offsets: Array<CGSize> = []
   @State var lastOffsets: Array<CGSize> = []
   @State var dropZones: Array<CGRect> = []
   @State var pipGeometries: Array<CGRect> =  []
-
+  
   @State var placedWords: Array<String> = []
   
   @State var currentQuestionIndex: Int = 0
@@ -29,13 +37,16 @@ struct ContentView: View {
   @State var viewIsReady: Bool = false
   @State var isComplete: Bool = false
   @State var isGameFinish: Bool = false
-  @State var showSheet: Bool = true
+//  @State var showSheet: Bool = true
   @State var isFirstTimeSee: Bool = true
   
   @State var totalPlayed: Int = 0
   @State var completePlayed: Int = 0
   
   @State var cheat: Bool = false
+//  @State var showHint: Bool = false
+  
+  @State var currentSheet: sheets? = .result
   
   let systemFont: Font = .system(size: 30, design: .monospaced)
   let customFont: Font = .custom("Galactic-Basic-Standard", size: 30)
@@ -69,9 +80,10 @@ struct ContentView: View {
         print(placedWords)
         isComplete = currentQuestion.concat(answer: placedWords)
         if(isComplete){
-          showSheet = true
+          currentSheet = .result
           viewIsReady = false
           self.completePlayed += 1
+          t.stop()
         }
       }
       if(currentQuestionIndex == questions.count - 1){
@@ -95,10 +107,12 @@ struct ContentView: View {
           }
           .padding(.top, 40)
         HStack{
+          Button("Hint"){
+            self.currentSheet = .hint
+          }
           Spacer()
           Text("CHEAT")
           Toggle(isOn: $cheat){
-            
           }
         }
         Spacer()
@@ -109,8 +123,7 @@ struct ContentView: View {
             HStack{
               ForEach(currentQuestion.wordArray.indices, id: \.self){ index in
                 if(currentQuestion.indexIsRedacted(index)){
-                  Color
-                    .orange
+                  Color(red: 0.85, green: 0.85, blue: 0.85)
                     .frame(width: 50, height: 50, alignment: .center)
                     .overlay(
                       GeometryReader(content: { geometry in
@@ -124,7 +137,7 @@ struct ContentView: View {
                 else{
                   ZStack{
                     Color
-                      .green
+                      .gray
                       .frame(width: 50, height: 50, alignment: .center)
                     Text("\(currentQuestion.wordArray[index])")
                       .font((cheat) ? systemFont : customFont )
@@ -167,24 +180,31 @@ struct ContentView: View {
           }
         }
       }
-    }.sheet(isPresented: $showSheet){
-      PassSheet(
-        showSheet: $showSheet,
-        isComplete: $isComplete,
-        isGameFinish: $isGameFinish,
-        isFirstTimeSee: $isFirstTimeSee,
-        resetGame: self.resetGame,
-        initGame: self.initView,
-        totalPlayed: $totalPlayed,
-        completePlayed: $completePlayed
-      )
-      .onAppear {
-        self.isGameFinish = (self.currentQuestionIndex == self.questions.count - 1)
-        t.stop()
+    }.sheet(item: $currentSheet, content: { item in
+      switch item{
+        case .result:
+          PassSheet(
+            currentSheet: $currentSheet,
+            isComplete: $isComplete,
+            isGameFinish: $isGameFinish,
+            isFirstTimeSee: $isFirstTimeSee,
+            resetGame: self.resetGame,
+            initGame: self.initView,
+            totalPlayed: $totalPlayed,
+            completePlayed: $completePlayed
+          )
+          .onAppear {
+            self.isGameFinish = (self.currentQuestionIndex == self.questions.count - 1)
+          }
+        case .hint:
+          HintSheet(
+            cq: self.currentQuestion,
+            currentSheet: $currentSheet
+          )
       }
-    }
+    })
   }
-
+  
   
   func initView() {
     self.timerInit()
@@ -203,7 +223,8 @@ struct ContentView: View {
       },
       callbackOnTimerDone: {
         self.progress = 0.0
-        self.showSheet = true
+        self.currentSheet = .result
+        t.stop()
         self.viewIsReady = false
         return 0
       }
@@ -230,7 +251,10 @@ struct ContentView: View {
     for q in qs{
       questions.append(Word(wordRaw: q.word, imagePath: q.image, redactedIndices: q.holes))
     }
-    print(qs)
+    for q in questions{
+      print(q.imagePath)
+    }
+    self.questions.shuffle()
     self.getQuestion()
     self.totalPlayed = 0
     self.completePlayed = 0
@@ -264,6 +288,7 @@ struct ContentView: View {
     self.getQuestion()
     t.start()
     self.viewIsReady = true
+    print("GAME START")
   }
 }
 

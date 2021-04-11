@@ -13,9 +13,9 @@ class Word: Codable {
   var wordArray: Array<String>
   var redactedIndices: Array<Int> = []
   var answerPool: Array<String> = []
-  var imagePath: String? = ""
+  var imagePath: String = ""
   
-  init(wordRaw: String, imagePath: String? = nil, redactedIndices: Array<Int>? = []) {
+  init(wordRaw: String, imagePath: String = "", redactedIndices: Array<Int>? = []) {
     self.wordRaw = wordRaw
     self.wordArray = wordRaw.map{ String($0) }
     self.imagePath = imagePath

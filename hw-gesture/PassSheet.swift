@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PassSheet: View {
-  @Binding var showSheet: Bool
+  @Binding var currentSheet: sheets?
   @Binding var isComplete: Bool
   @Binding var isGameFinish: Bool
   @Binding var isFirstTimeSee: Bool
@@ -23,7 +23,7 @@ struct PassSheet: View {
     if(isFirstTimeSee){
       Text("Press start to start.")
       Button("Start"){
-        showSheet = false
+        currentSheet = nil
         isFirstTimeSee = false
         self.resetGame(false)
       }
@@ -34,7 +34,7 @@ struct PassSheet: View {
         Text("Congratulations! Game Finished!")
         Image("whyleave")
         Button("Stay, and play again"){
-          showSheet = false
+          currentSheet = nil
           isGameFinish = false
           self.initGame()
           self.resetGame(true)
@@ -45,7 +45,7 @@ struct PassSheet: View {
         Image("yoda-blame")
         Text("Failed, you have, harder next time you will try.") // I know the sentence looks damn weird, but that's how Yoda talks.
         Button("Start Over"){
-          showSheet = false
+          currentSheet = nil
           isGameFinish = false
           self.initGame()
           self.resetGame(true)
@@ -55,7 +55,7 @@ struct PassSheet: View {
     else{
       Text("\( (isComplete) ? "Congratulations!" : "Failed" )")
       Button("Dismiss"){
-        showSheet = false
+        currentSheet = nil
         isComplete = false
         self.resetGame(true)
       }
